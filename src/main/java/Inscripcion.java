@@ -10,11 +10,16 @@ public class Inscripcion {
         this.estudiante = estudiante;
     }
 
-    public String toString(){
-        return "Curso: "+curso+"\naño: "+año+"\nsemestre: "+semestre+"\nestudiante: "+estudiante;
+    @Override
+    public String toString() {
+        return "Curso: " + curso.getCurso() + 
+               "\nAño: " + año + 
+               "\nSemestre: " + semestre + 
+               "\nEstudiante: " + estudiante.getNombres();
     }
 
-    public String getInscripciones(){
+    // Obtener toda la información de la inscripción
+    public String getInscripciones() {
         return this.toString();
     }
 
@@ -50,4 +55,19 @@ public class Inscripcion {
         this.estudiante = estudiante;
     }
     
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Inscripcion that = (Inscripcion) obj;
+        return año == that.año &&
+               semestre == that.semestre &&
+               curso.equals(that.curso) &&
+               estudiante.equals(that.estudiante);
+    }
+
+    @Override
+    public int hashCode() {
+        return curso.hashCode() + Integer.hashCode(año) + Integer.hashCode(semestre) + estudiante.hashCode();
+    }
 }

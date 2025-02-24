@@ -11,12 +11,7 @@ public class Persona{
     
     @Override
     public String toString(){
-        return "id: "+id+"\nnombre: "+nombres+"\napellido: "+apellidos+"\nemail: "+email;
-    }
-    
-    public String getPersona(){
-        return this.toString();
-    }
+        return "ID: " + id + "\nNombre: " + nombres + "\nApellido: " + apellidos + "\nEmail: " + email;    }
 
     public double getId() {
         return id;

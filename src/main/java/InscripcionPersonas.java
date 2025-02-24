@@ -1,5 +1,6 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,10 +21,10 @@ public class InscripcionPersonas {
                 if (dat.length == 4) {
                     int id = Integer.parseInt(dat[0]);
                     String nombre = dat[1];
-                    String ciudad = dat[2];
+                    String apellido = dat[2];
                     String email = dat[3];
 
-                    Persona persona = new Persona(id, nombre, ciudad, email);
+                    Persona persona = new Persona(id, nombre, apellido, email);
                     listaInscripcion.add(persona);
                 }
             }
@@ -59,14 +60,14 @@ public class InscripcionPersonas {
         System.out.println("Persona con ID " + id + " eliminada (si existía).");
     }
 
-    public void mostrarInscripciones() {
-        if (listaInscripcion.isEmpty()) {
-            System.out.println("No hay personas inscritas.");
-        } else {
-            System.out.println("Lista de personas inscritas:");
+    public void guardarInformacion(String archivo) {
+        try (FileWriter fw = new FileWriter(archivo)) {
             for (Persona p : listaInscripcion) {
-                System.out.println(p);
+                fw.write(p.getId() + "," + p.getNombres() + "," + p.getApellidos() + "," + p.getEmail() + "\n");
             }
+            System.out.println("Datos guardados correctamente en " + archivo);
+        } catch (IOException e) {
+            System.out.println("Error al guardar los datos: " + e.getMessage());
         }
     }
 
