@@ -19,7 +19,7 @@ public class CursosInscritos implements Servicios {
         }
     }
 
-    // Método para eliminar una inscripción sin ID (usando equals)
+    // Método para eliminar una inscripción
     public void eliminar(Inscripcion inscripcion) {
         if (listado.remove(inscripcion)) {
             System.out.println("Inscripción eliminada correctamente.");
@@ -28,7 +28,7 @@ public class CursosInscritos implements Servicios {
         }
     }
 
-    // Método para actualizar una inscripción (buscar y reemplazar)
+    // Método para actualizar una inscripción
     public void actualizar(Inscripcion inscripcionAntigua, Inscripcion nuevaInscripcion) {
         int index = listado.indexOf(inscripcionAntigua);
         if (index != -1) {
@@ -43,10 +43,26 @@ public class CursosInscritos implements Servicios {
     public void guardarInformacion(String archivo) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivo))) {
             for (Inscripcion inscripcion : listado) {
-                bw.write(inscripcion.getCurso().getCurso() + "," +
-                         inscripcion.getAño() + "," +
-                         inscripcion.getSemestre() + "," +
-                         inscripcion.getEstudiante().getNombres() + "\n");
+                bw.write(
+                    inscripcion.getCurso().getId() + "," +
+                    inscripcion.getCurso().getNombre() + "," +
+                    inscripcion.getCurso().isActivo() + "," +
+                    inscripcion.getCurso().getPrograma().getId() + "," +
+                    inscripcion.getCurso().getPrograma().getNombre() + "," +
+                    inscripcion.getCurso().getPrograma().getDuracion() + "," +
+                    inscripcion.getAño() + "," +
+                    inscripcion.getSemestre() + "," +
+                    inscripcion.getEstudiante().getId() + "," +
+                    inscripcion.getEstudiante().getNombres() + "," +
+                    inscripcion.getEstudiante().getApellidos() + "," +
+                    inscripcion.getEstudiante().getEmail() + "," +
+                    inscripcion.getEstudiante().getCodigo() + "," +
+                    inscripcion.getEstudiante().getPromedio() + "," +
+                    inscripcion.getEstudiante().getPrograma().getId() + "," +
+                    inscripcion.getEstudiante().getPrograma().getNombre() + "," +
+                    inscripcion.getEstudiante().getPrograma().getDuracion() + "," +
+                    inscripcion.getEstudiante().getActivo() + "\n"
+                );
             }
             System.out.println("Información guardada en el archivo: " + archivo);
         } catch (IOException e) {
@@ -60,13 +76,48 @@ public class CursosInscritos implements Servicios {
             String linea;
             while ((linea = br.readLine()) != null) {
                 String[] datos = linea.split(",");
-                if (datos.length == 4) {
-                    Curso curso = new Curso(datos[0]); 
-                    int año = Integer.parseInt(datos[1]);
-                    int semestre = Integer.parseInt(datos[2]);
-                    Estudiante estudiante = new Estudiante(datos[3]); 
-                    Inscripcion inscripcion = new Inscripcion(curso, año, semestre, estudiante);
-                    listado.add(inscripcion);
+
+                if (datos.length == 17) {
+                    try {
+                        // Crear el programa del curso
+                        double programaCursoId = Double.parseDouble(datos[3]);
+                        String programaCursoNombre = datos[4];
+                        double programaCursoDuracion = Double.parseDouble(datos[5]);
+                        Programa programaCurso = new Programa(programaCursoId, programaCursoDuracion, programaCursoNombre, "", null);
+
+                        // Crear el curso
+                        int cursoId = Integer.parseInt(datos[0]);
+                        String cursoNombre = datos[1];
+                        boolean cursoActivo = Boolean.parseBoolean(datos[2]);
+                        Curso curso = new Curso(cursoId, cursoNombre, cursoActivo, programaCurso);
+
+                        // Obtener año y semestre
+                        int año = Integer.parseInt(datos[6]);
+                        int semestre = Integer.parseInt(datos[7]);
+
+                        // Crear el programa del estudiante
+                        double programaEstudianteId = Double.parseDouble(datos[14]);
+                        String programaEstudianteNombre = datos[15];
+                        double programaEstudianteDuracion = Double.parseDouble(datos[16]);
+                        Programa programaEstudiante = new Programa(programaEstudianteId, programaEstudianteDuracion, programaEstudianteNombre, "", null);
+
+                        // Crear estudiante
+                        double estudianteId = Double.parseDouble(datos[8]);
+                        String nombres = datos[9];
+                        String apellidos = datos[10];
+                        String email = datos[11];
+                        double codigo = Double.parseDouble(datos[12]);
+                        double promedio = Double.parseDouble(datos[13]);
+                        boolean activo = Boolean.parseBoolean(datos[14]);
+
+                        Estudiante estudiante = new Estudiante(estudianteId, nombres, apellidos, email, codigo, promedio, programaEstudiante, activo);
+
+                        // Crear inscripción y agregarla
+                        Inscripcion inscripcion = new Inscripcion(curso, año, semestre, estudiante);
+                        listado.add(inscripcion);
+                    } catch (NumberFormatException e) {
+                        System.out.println("Error en el formato de los datos: " + e.getMessage());
+                    }
                 }
             }
             System.out.println("Datos cargados desde el archivo correctamente.");
@@ -87,8 +138,11 @@ public class CursosInscritos implements Servicios {
 
     // Métodos de la interfaz Servicios
     @Override
-    public String imprimirPosicion(String posicion) {
-        throw new UnsupportedOperationException("Método no implementado.");
+    public String imprimirPosicion(int posicion) {
+        if (posicion >= 0 && posicion < listado.size()) {
+            return listado.get(posicion).toString();
+        }
+        return "Posición fuera de rango.";
     }
 
     @Override

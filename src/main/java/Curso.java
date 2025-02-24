@@ -1,21 +1,19 @@
 public class Curso {
     int id;
+    String nombre;
     boolean activo;
     Programa programa;
 
-    public Curso(int id, boolean activo, Programa programa){
+    public Curso(int id, String nombre, boolean activo, Programa programa){
         this.id = id;
+        this.nombre = nombre;
         this.activo = activo;
         this.programa = programa;
     }
 
     @Override
     public String toString(){
-        return "id: "+id+"\nActivo: "+activo+"\nPrograma: "+programa;
-    }
-
-    public String getCurso(){
-        return this.toString();
+        return "id: "+ id +"\nNombre: "+nombre+"\nActivo: "+activo+"\nPrograma: "+programa;
     }
 
     public int getId() {
@@ -24,6 +22,14 @@ public class Curso {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getNombre(){
+        return nombre;
+    }
+
+    public void setNombre(String nombre){
+        this.nombre = nombre;
     }
 
     public boolean isActivo() {

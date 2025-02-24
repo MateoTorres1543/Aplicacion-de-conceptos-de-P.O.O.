@@ -12,7 +12,7 @@ public class Inscripcion {
 
     @Override
     public String toString() {
-        return "Curso: " + curso.getCurso() + 
+        return "Curso: " + curso.getNombre() + 
                "\nAño: " + año + 
                "\nSemestre: " + semestre + 
                "\nEstudiante: " + estudiante.getNombres();
