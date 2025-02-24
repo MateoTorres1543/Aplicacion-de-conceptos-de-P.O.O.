@@ -63,7 +63,7 @@ public class CursosProfesores implements Servicios {
 
     // Métodos de la interfaz Servicios (si es necesario implementarlos)
     @Override
-    public String imprimirPosicion(String posicion) {
+    public String imprimirPosicion(int posicion) {
         throw new UnsupportedOperationException("Método no implementado.");
     }
 
